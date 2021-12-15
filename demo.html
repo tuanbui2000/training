@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>練習</title>
+    <meta charset="utf-8">
+</head>
+<style>
+    .a {
+        margin: 10px 40px 5px 40px;
+        border-radius: 20px;
+        padding: 50px 20px;
+        background-color: pink;
+        text-align: center;
+    }
+    
+    .b {
+        margin: 10px 40px 5px 40px;
+        padding: 50px 20px;
+        border-radius: 20px;
+        background-color: pink;
+        text-align: center;
+    }
+</style>
+</head>
+
+<body>
+    <form>
+        <div class="a">
+    </form>
+    <h1>prefectualsテープル</h1>
+    <form action="" method="post">
+        <select name="cha" id="cha">
+            <option disabled selected>選択してください</option>
+            <option value="1">「県」の付く都道府県</option>
+            <option value="2">「府」の付く都道府県</option>
+            <option value="3">「都」の付く都道府県</option>
+            <option value="4">「道」の付く都道府県</option>
+        </select>
+        <input type="submit" name="send" value="選択">
+    </form>
+    </div>
+    <div class="b">
+
+        <?php
+      if(isset($_POST["cha"])){
+        $sentaku = $_POST["cha"];
+        }
+        try{
+          $db = new PDO('mysql:host=localhost;dbname=training;charset=utf8','root','admin');
+          $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+          if(isset($_POST["send"])){
+            switch ($sentaku) {
+              case 1:
+                $value = "'%県%' ";
+                break;
+                case 2:
+                $value = "'%府%' ";
+                break;  
+              case 3:
+                $value = "'%都%' ";
+                break;    
+              case 4:
+              $value = "'%道%' ";
+                break;    
+              default:
+              exit;
+            }
+            $sql = "SELECT * from prefecturals where name like ".$value ;
+        }
+            $stmt = $db->query($sql);
+            while($data = $stmt->fetch(PDO::FETCH_NUM)){
+              echo "$data[1].";".$data[2]";
+              
+            }
+        $db = null;
+    } catch(PDOException $e) {
+        print('データベースに接続できませんでした。'.$e->getMessage());
+    } catch (Exception $e) {
+        print('予期せぬエラーです'.$e->getMessage());
+    }
+        ?>
+    </div>
+</body>
+</htm>
